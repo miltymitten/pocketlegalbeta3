@@ -15,7 +15,9 @@ function App() {
   const [videosearch, setVideoSearch] = useState(false);
   const [videoToggle, setVideoToggle] = useState();
   const [googleresult, setGoogleResults] = useState([]);
+  const [clickCount, setClickCount] = useState({});
 
+  // fetches data from Wikipedia using the pre-defined search term
   const handlewikiSearch = async () => {
 
     if (search ==='') return;
@@ -34,6 +36,7 @@ function App() {
     setSearchInfo(json.query.searchinfo);
   }
 
+  // fetches data from YouTube using the pre-defined search term
   const handleyoutubeSearch = async() => {
     if (search ==='') return;
 
@@ -53,6 +56,7 @@ function App() {
     console.log(json.items)
   }
 
+  // fetches data from Google using the pre-defined search term
   const handlegoogleSearch = async() => {
     if (search ==='') return;
 
@@ -68,7 +72,6 @@ function App() {
     }
     const json = await response.json()
     setGoogleResults(json.items)
-    console.log(json.items)
 
   }
 
@@ -85,6 +88,7 @@ function App() {
     }
     }, [search]);
 
+    // keepts track of whether video search is on or off
     useEffect(() => {
       if (videosearch === true) {
       setVideoToggle("Video search is on")
@@ -94,8 +98,26 @@ function App() {
       }
     }, [videosearch])
 
-  return (
 
+    // keeps track of how many times each button is clicked
+    useEffect(() => {
+      if (search === '') {
+        return;
+      }
+      else if (search in clickCount){
+        setClickCount({...clickCount, [search]: clickCount[search] + 1})
+      }
+      else if (clickCount.length == 0) {
+        setClickCount({[search]: 1})
+      }
+      else {
+        setClickCount({...clickCount, [search]: 1})
+      }
+    }, [search])
+
+  return (
+    
+    // Nav bar components
     <Container fluid="md">
     <Row>
       <Col>
@@ -113,6 +135,7 @@ function App() {
 
       <header>
         <h1>Legal Wiki Seeker</h1>
+        {/* button for toggling video search on or off */}
         <ToggleButton
         className="mb-2"
           id="toggle-check"
@@ -123,15 +146,19 @@ function App() {
             {videoToggle}
         </ToggleButton> 
 
+        {/* buttons with pre-dfined search terms  */}
         <form onClick={e => setSearch(e.target.value)}> 
   
           <Button
+            className = "search-button"
             variant = "secondary"
             value="Judge"
             type="button" 
             placeholder="what are you looking for?"
             >Judge
             </Button> 
+          
+          {' '}
 
           <Button
           variant = "secondary"
@@ -140,6 +167,8 @@ function App() {
           placeholder="what are you looking for?"
           >Jury
           </Button> 
+
+          {' '}
 
           <Button
           variant = "secondary"
@@ -151,6 +180,7 @@ function App() {
 
         </form>
        
+        {/* returns number of search results from Wikipedia */}
         {(searchInfo.totalhits)? <p><br></br>Search results on Wikipedia:{searchInfo.totalhits} </p>:''}
       </header>
 
@@ -159,58 +189,64 @@ function App() {
       <div className="result">
 
         <div className="non-video-results">
-        <div className="wiki-results">
-        {result.map((result,i) => {
-          const url = `https://en.wikipedia.org/?curid=${result.pageid}`; 
+          <div className="wiki-results">
+          {result.map((result,i) => {
+            const url = `https://en.wikipedia.org/?curid=${result.pageid}`; 
 
-          return(
-            <div key={i}>
-              <h3>{result.title}</h3>
-              <p dangerouslySetInnerHTML= {{__html: result.snippet}}>
-              
-              </p>
-              <a href={url} target="_blank" rel='noreferrer'>Read More</a>
-              <br></br>
-              <br></br>
-              <br></br>
-            </div>
-          )
-        })}
-        </div>
+            return(
+              <div key={i}>
+                <h3>{result.title}</h3>
+                <p dangerouslySetInnerHTML= {{__html: result.snippet}}>
+                
+                </p>
+                <a href={url} target="_blank" rel='noreferrer'>Read More</a>
+                <br></br>
+                <br></br>
+                <br></br>
+              </div>
+            )
+          })}
+          </div>
 
-        {(googleresult.length)? <h3>Top {googleresult.slice(0,3).length} results from Google</h3> : ''}
+          {(googleresult.length)? <h3>Top {googleresult.slice(0,3).length} results from Google</h3> : ''}
 
-        <div className="google-results">
-        {googleresult.slice(0,3).map((googleresult,i) => {
+          <div className="google-results">
+          {googleresult.slice(0,3).map((googleresult,i) => {
 
-          return(
-            <div key={i}>
-              <p><a class = 'reg' href={googleresult.link} target="_blank" rel='noreferrer'>{googleresult.title}</a></p>
-              <p dangerouslySetInnerHTML= {{__html: googleresult.snippet}}>
-              
-              </p>
-            </div>
-          )
-        })}
-        </div>
+            return(
+              <div key={i}>
+                <p><a class = 'reg' href={googleresult.link} target="_blank" rel='noreferrer'>{googleresult.title}</a></p>
+                <p dangerouslySetInnerHTML= {{__html: googleresult.snippet}}>
+                
+                </p>
+              </div>
+            )
+          })}
+          </div>
         </div>
 
         <div className="video-results">
-        <div className="video-container">
-        {ytresult.map((ytresult,i) => {
-          const url = `https://www.youtube.com/embed/${ytresult.id.videoId}`;
-          return(
-            <div className="videos" key={i}>
-              <iframe class="video" src={url}
-              frameBorder='0'
-              allow='autoplay; encrypted-media'
-              allowFullScreen
-              title='video'
-              />
-            </div>
-          )
-        })}
-        </div>
+          <div className="video-container">
+          {ytresult.map((ytresult,i) => {
+            const url = `https://www.youtube.com/embed/${ytresult.id.videoId}`;
+            return(
+              // the video titles and the videos themselves are in separate divs so tha they don't overlap
+              <div>
+                <div>
+                  <p className="video-title"><small>{ytresult.snippet.title}</small></p>
+                </div>
+                <div className="videos" key={i}>
+                  <iframe class="video" src={url}
+                  frameBorder='0'
+                  allow='autoplay; encrypted-media'
+                  allowFullScreen
+                  title='video'
+                  />
+                </div>
+              </div>
+            )
+          })}
+          </div>
         </div>
 
       </div>
