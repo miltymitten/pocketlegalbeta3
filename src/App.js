@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Button from 'react-bootstrap/Button';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,8 +11,12 @@ function App() {
   const [search, setSearch] = useState("");
   const [result, setResults] = useState([]);
   const [searchInfo, setSearchInfo] = useState({});
+  const [ytresult, setYtResults] = useState([]);
+  const [videosearch, setVideoSearch] = useState(false);
+  const [videoToggle, setVideoToggle] = useState();
+  const [googleresult, setGoogleResults] = useState([]);
 
-  const handleSearch = async () => {
+  const handlewikiSearch = async () => {
 
     if (search ==='') return;
     
@@ -29,10 +34,65 @@ function App() {
     setSearchInfo(json.query.searchinfo);
   }
 
+  const handleyoutubeSearch = async() => {
+    if (search ==='') return;
+
+    const youtube_api_key = 'AIzaSyDz8bGB5uV2VqmNiuLoel23mV3t4F8rs8E'
+
+    const endpoint = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q=${search}&key=${youtube_api_key}`
+
+    const response = await fetch(endpoint);
+
+    if (!response.ok){
+      throw Error(response.statusText)
+
+    }
+
+    const json = await response.json()
+    setYtResults(json.items)
+    console.log(json.items)
+  }
+
+  const handlegoogleSearch = async() => {
+    if (search ==='') return;
+
+    const API_KEY = 'AIzaSyDz8bGB5uV2VqmNiuLoel23mV3t4F8rs8E'
+    const CONTEXT_KEY = '1237e94b63fde4acc'
+
+    const endpoint = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CONTEXT_KEY}&q=${search}`
+
+    const response = await fetch(endpoint);
+
+    if (!response.ok){
+      throw Error(response.statusText)
+    }
+    const json = await response.json()
+    setGoogleResults(json.items)
+    console.log(json.items)
+
+  }
+
   // keeps track of the search variable and runs handleSearch when search is updated
   useEffect(() => {
-    handleSearch()
+    if (videosearch === true) {
+      handlewikiSearch();
+      handleyoutubeSearch();
+      handlegoogleSearch();
+    }
+    else {
+      handlewikiSearch();
+      handlegoogleSearch();
+    }
     }, [search]);
+
+    useEffect(() => {
+      if (videosearch === true) {
+      setVideoToggle("Video search is on")
+      }
+      else {
+        setVideoToggle("Video search is off")
+      }
+    }, [videosearch])
 
   return (
 
@@ -53,9 +113,18 @@ function App() {
 
       <header>
         <h1>Legal Wiki Seeker</h1>
+        <ToggleButton
+        className="mb-2"
+          id="toggle-check"
+          type="checkbox"
+          variant="outline-primary"
+          checked={videosearch}
+          onChange={(e) => setVideoSearch(e.currentTarget.checked)}>
+            {videoToggle}
+        </ToggleButton> 
 
         <form onClick={e => setSearch(e.target.value)}> 
-          
+  
           <Button
             variant = "secondary"
             value="Judge"
@@ -80,43 +149,72 @@ function App() {
           >Lawyer
           </Button> 
 
-          {/* <input 
-            type="button" 
-            value="Jury"
-            placeholder="what are you looking for?"
-            //value = {search}
-            // onChange={e=>setSearch(e.target.value)}
-          /> 
-
-          <input 
-            type="button" 
-            value="Lawyer"
-            placeholder="what are you looking for?"
-            //value = {search}
-            // onChange={e=>setSearch(e.target.value)}
-          />  */}
-
         </form>
        
-        {(searchInfo.totalhits)? <p>Search Result:{searchInfo.totalhits} </p>:''}
+        {(searchInfo.totalhits)? <p><br></br>Search results on Wikipedia:{searchInfo.totalhits} </p>:''}
       </header>
 
-      <div className="results">
+      {(searchInfo.totalhits)?
+      
+      <div className="result">
+
+        <div className="non-video-results">
+        <div className="wiki-results">
         {result.map((result,i) => {
           const url = `https://en.wikipedia.org/?curid=${result.pageid}`; 
 
           return(
-            <div className="result" key={i}>
+            <div key={i}>
               <h3>{result.title}</h3>
               <p dangerouslySetInnerHTML= {{__html: result.snippet}}>
               
               </p>
               <a href={url} target="_blank" rel='noreferrer'>Read More</a>
+              <br></br>
+              <br></br>
+              <br></br>
             </div>
           )
         })}
-        
+        </div>
+
+        {(googleresult.length)? <h3>Top {googleresult.slice(0,3).length} results from Google</h3> : ''}
+
+        <div className="google-results">
+        {googleresult.slice(0,3).map((googleresult,i) => {
+
+          return(
+            <div key={i}>
+              <p><a class = 'reg' href={googleresult.link} target="_blank" rel='noreferrer'>{googleresult.title}</a></p>
+              <p dangerouslySetInnerHTML= {{__html: googleresult.snippet}}>
+              
+              </p>
+            </div>
+          )
+        })}
+        </div>
+        </div>
+
+        <div className="video-results">
+        <div className="video-container">
+        {ytresult.map((ytresult,i) => {
+          const url = `https://www.youtube.com/embed/${ytresult.id.videoId}`;
+          return(
+            <div className="videos" key={i}>
+              <iframe class="video" src={url}
+              frameBorder='0'
+              allow='autoplay; encrypted-media'
+              allowFullScreen
+              title='video'
+              />
+            </div>
+          )
+        })}
+        </div>
+        </div>
+
       </div>
+      : ' ' }
     </div>
     </Col>
     </Row>
