@@ -57,13 +57,20 @@ h1{
   transform: translateY(-5px);
 }
 
-.results{
-  max-width: 768px;
-  margin: 0 auto;
+.non-video-results {
+  width:50%;
+  float: left;
+}
+
+.video-results {
+  width:50%;
+  height: 100%;
+  float: right;
 }
 
 .result{
-  width: 100%;
+  width: 75%;
+  margin: auto;
   padding: 16px;
   margin-bottom: 16px;
   background-color: #fff;
@@ -71,9 +78,9 @@ h1{
   transition: 0.4s;
 }
 
-.result:hover{
+/* .result:hover{
   box-shadow: 3px 3px 6px rgba(0, 0, 0, .2);
-}
+} */
 
 .result h3{
   color:#888;
@@ -87,7 +94,7 @@ h1{
   margin-bottom: 16px;
 }
 
-.result a{
+.wiki-results a{
   display: inline-block;
   padding: 12px 16px;
   background-color: #EEE;
@@ -98,6 +105,37 @@ h1{
   transition: 0.4s;
 }
 
-.result a:hover{
+.wiki-results a:hover{
   background-color: rgb(255, 236, 127);
+}
+
+
+.video-container {
+  border: 3px solid #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.videos {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  /* padding: 12.5px; */
+  /* width: 100%;
+  height: 100%;
+  float: left;
+  border: 2px; */
+}
+
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 12.5px;
+  /* border: 0; */
 }
