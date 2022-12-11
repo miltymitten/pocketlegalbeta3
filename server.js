@@ -27,8 +27,9 @@ mongoose.connect(process.env.MONGO_URI)
     // fire off a function when the promise is resolved
     .then(() => {
         // listen for requests at port defined in env file only after connection to db is made
-        app.listen(process.env.PORT, () => {
-        console.log('connected to db and listening on port', process.env.PORT)
+        const PORT = process.env.PORT || 5000
+        app.listen(PORT, () => {
+        console.log(`connected to db and listening on port: ${PORT}`)
 })
     })
     // catch any errors
