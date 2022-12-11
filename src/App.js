@@ -188,7 +188,7 @@ function App() {
       
       <div className="result">
 
-        <div className="non-video-results">
+        <div className="endpoint-results">
           <div className="wiki-results">
           {result.map((result,i) => {
             const url = `https://en.wikipedia.org/?curid=${result.pageid}`; 
@@ -225,7 +225,7 @@ function App() {
           </div>
         </div>
 
-        <div className="video-results">
+        <div className="endpoint-results">
           <div className="video-container">
           {ytresult.map((ytresult,i) => {
             const url = `https://www.youtube.com/embed/${ytresult.id.videoId}`;

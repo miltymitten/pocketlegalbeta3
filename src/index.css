@@ -57,27 +57,37 @@ h1{
   transform: translateY(-5px);
 }
 
-.non-video-results {
-  width:50%;
+/* .endpoint-results {
+  width: 50%;
   float: left;
   padding: 10px;
-}
+} */
 
-.video-results {
+/* .video-results {
   width:50%;
   height: 100%;
   float: right;
   padding: 10px;
-}
+} */
 
 .result{
-  width: 75%;
+  width: 90%;
   margin: auto;
   padding: 16px;
   margin-bottom: 16px;
   background-color: #fff;
   border-radius: 16px;
   transition: 0.4s;
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-direction: row; */
+}
+
+@media (min-width: 500px) {
+  .result .endpoint-results{
+     width:50% !important;
+     flex-wrap: wrap;
+}
 }
 
 .result:hover{
