@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose')
 // access the routes inside metrics.js
 const metricRoutes = require('./routes/metrics')
+const path = require('path');
 
 // creates an express app
 const app = express();
