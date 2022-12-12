@@ -18,6 +18,13 @@ app.use((req, res, next) => {
     next()
 })
 
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("build"));
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname,  "build", "index.html"));
+    });
+  }
+
 //// routes: need app to react  to requests using routes
 // grabs all the routes from metrics.js and uses them when a request is made to /api/workouts endpoint
 app.use('/api/metrics', metricRoutes)
