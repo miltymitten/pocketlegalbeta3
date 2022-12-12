@@ -1,6 +1,7 @@
 {
   "proxy": "http://localhost:5000",
   "name": "pocketlegalbeta3",
+  "homepage": "https://pocketlegal.herokuapp.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
