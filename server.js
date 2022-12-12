@@ -19,6 +19,10 @@ app.use((req, res, next) => {
     next()
 })
 
+//// routes: need app to react  to requests using routes
+// grabs all the routes from metrics.js and uses them when a request is made to /api/workouts endpoint
+app.use('/api/metrics', metricRoutes)
+
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("build"));
     app.get("*", (req, res) => {
@@ -26,9 +30,6 @@ if (process.env.NODE_ENV === "production") {
     });
   }
 
-//// routes: need app to react  to requests using routes
-// grabs all the routes from metrics.js and uses them when a request is made to /api/workouts endpoint
-app.use('/api/metrics', metricRoutes)
 
 // connect to the database: returns a promise because its an async operation
 mongoose.connect(process.env.MONGO_URI)
