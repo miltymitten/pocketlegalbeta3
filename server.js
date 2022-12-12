@@ -15,7 +15,7 @@ const app = express();
 // checks if the request has data to it, if it does, it will parse it and put it in req
 app.use(express.json())
 app.use((req, res, next) => {
-    console.log(req.path, req.method)
+    // console.log(req.path, req.method)
     next()
 })
 
@@ -40,11 +40,11 @@ mongoose.connect(process.env.MONGO_URI)
         // listen for requests at port defined in env file only after connection to db is made
         const PORT = process.env.PORT || 5000
         app.listen(PORT, () => {
-        console.log(`connected to db and listening on port: ${PORT}`)
+        // console.log(`connected to db and listening on port: ${PORT}`)
 })
     })
     // catch any errors
     .catch((error) => {
-        console.log(error)
+        // console.log(error)
     })
 
