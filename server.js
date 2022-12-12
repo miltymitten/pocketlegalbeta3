@@ -23,13 +23,15 @@ app.use((req, res, next) => {
 // grabs all the routes from metrics.js and uses them when a request is made to /api/workouts endpoint
 app.use('/api/metrics', metricRoutes)
 
+app.use(express.static(path.join(__dirname, "frontend", "build")))
+
+
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("build"));
     app.get("*", (req, res) => {
       res.sendFile(path.resolve(__dirname,  "frontend", "build", "index.html"));
     });
   }
-
 
 // connect to the database: returns a promise because its an async operation
 mongoose.connect(process.env.MONGO_URI)
