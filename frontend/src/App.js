@@ -57,7 +57,6 @@ function App() {
 
     const json = await response.json()
     setYtResults(json.items)
-    console.log(json.items)
   }
 
   // fetches data from Google using the pre-defined search term
@@ -138,8 +137,8 @@ function App() {
         const json = await response.json()
         
         if (response.ok) {
-          console.log(json)
-          console.log("counter updated")
+          // console.log(json)
+          // console.log("counter updated")
          }
     }
     updateClickCount()
