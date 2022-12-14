@@ -1,4 +1,4 @@
-// this file contains all the database logic for our routes
+// this file contains all the methods that interact with the database
 
 // const { response } = require('express')
 const mongoose = require('mongoose')

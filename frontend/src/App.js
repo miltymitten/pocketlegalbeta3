@@ -78,7 +78,7 @@ function App() {
 
   }
 
-  // keeps track of the search variable and runs handleSearch when search is updated
+  // keeps track of the search variable and runs handleSearch methods when search is updated
   useEffect(() => {
     if (videosearch === true) {
       handlewikiSearch();
@@ -101,31 +101,12 @@ function App() {
       }
     }, [videosearch])
 
-
-    // keeps track of how many times each button is clicked
-    // useEffect(() => {
-    //   if (search === '') {
-    //     return;
-    //   }
-    //   else if (search in clickCount){
-    //     setClickCount({...clickCount, [search]: clickCount[search] + 1})
-    //   }
-    //   else if (clickCount.length === 0) {
-    //     setClickCount({[search]: 1})
-    //   }
-    //   else {
-    //     setClickCount({...clickCount, [search]: 1})
-    //   }
-    // }, [search])
-
     // updates the click metric in the database whenever the search term is updated
     useEffect(() => {
       if (search === '') {
         return;
       };
-
       const searchterm = `/api/metrics/${search}`
-
       const updateClickCount = async () => {
         const response = await fetch(searchterm, {
           method: 'PATCH',
@@ -143,7 +124,6 @@ function App() {
     }
     updateClickCount()
     }, [search])
-
 
   return (
     
