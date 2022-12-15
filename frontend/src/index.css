@@ -107,7 +107,8 @@ h1{
   margin-bottom: 0px; 
 }
 
-.wiki-results a{
+/* commenting this out because it was applying css to the "Read More" button which didnt match bootstrap */
+/* .wiki-results a{
   display: inline-block;
   padding: 12px 16px;
   background-color: #EEE;
@@ -116,11 +117,11 @@ h1{
   text-decoration: none;
   border-radius: 12px;
   transition: 0.4s;
-}
-
+} */
+/* 
 .wiki-results a:hover{
   background-color: rgb(255, 236, 127);
-}
+} */
 
 
 .video-container {
