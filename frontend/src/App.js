@@ -139,7 +139,7 @@ function App() {
           <Nav.Link href="/home">Pocket Legal</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href="https://github.com/miltymitten/pocketlegal-mernwebapp" target="_blank">About Us</Nav.Link>
+          <Nav.Link href="https://github.com/miltymitten/pocketlegalbeta3" target="_blank">About Us</Nav.Link>
         </Nav.Item>
       </Nav>
       </div>
