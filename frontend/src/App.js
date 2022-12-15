@@ -17,7 +17,7 @@ function App() {
   const [result, setResults] = useState([]);
   const [searchInfo, setSearchInfo] = useState({});
   const [ytresult, setYtResults] = useState([]);
-  const [videosearch, setVideoSearch] = useState(false);
+  const [videosearch, setVideoSearch] = useState(true);
   const [videoToggle, setVideoToggle] = useState();
   const [googleresult, setGoogleResults] = useState([]);
 
@@ -79,6 +79,7 @@ function App() {
   }
 
   // keeps track of the search variable and runs handleSearch methods when search is updated
+
   useEffect(() => {
     if (videosearch === true) {
       handlewikiSearch();
@@ -143,9 +144,10 @@ function App() {
       </Nav>
       </div>
         <header>
+          <br></br>
           <h1>Legal Wiki Seeker</h1>
-          {/* button for toggling video search on or off */}
-          <ToggleButton
+          {/* button for toggling video search on or off. commenting out because its for testing purposes. if this method needs to be used, also set the default value of videosearch to False in the useState hook*/}
+          {/* <ToggleButton
           className="mb-2"
             id="toggle-check"
             type="checkbox"
@@ -153,38 +155,38 @@ function App() {
             checked={videosearch}
             onChange={(e) => setVideoSearch(e.currentTarget.checked)}>
               {videoToggle}
-          </ToggleButton> 
+          </ToggleButton>  */}
 
           {/* buttons with pre-dfined search terms  */}
           <form onClick={e => setSearch(e.target.value)}> 
     
             <Button
               className = "search-button"
-              variant = "secondary"
-              value="Judge"
+              variant = "primary"
+              value="Voir dire"
               type="button" 
               placeholder="what are you looking for?"
-              >Judge
+              >Voir dire
               </Button> 
             
             {' '}
 
             <Button
-            variant = "secondary"
-            value="Jury"
+            variant = "primary"
+            value="Litigation"
             type="button" 
             placeholder="what are you looking for?"
-            >Jury
+            >Litigation
             </Button> 
 
             {' '}
 
             <Button
-            variant = "secondary"
-            value="Lawyer"
+            variant = "primary"
+            value='\"Structured Settlement\"'
             type="button" 
             placeholder="what are you looking for?"
-            >Lawyer
+            >Structured Settlement
             </Button> 
 
           </form>
@@ -205,9 +207,9 @@ function App() {
                 <div key={i}>
                   <h3>{result.title}</h3>
                   <p dangerouslySetInnerHTML= {{__html: result.snippet}}>
-                  
                   </p>
-                  <a href={url} target="_blank" rel='noreferrer'>Read More</a>
+                  <Button href={url} target="_blank" variant="secondary" size="sm">Read More
+                  </Button>
                   <br></br>
                   <br></br>
                   <br></br>
@@ -241,7 +243,11 @@ function App() {
                 // the video titles and the videos themselves are in separate divs so tha they don't overlap
                 <div>
                   <div>
-                    <p className="video-title"><small>{ytresult.snippet.title}</small></p>
+                    <p className="video-title">
+                      {/* dangerouslySetInnerHTML is necessary to decode symbols (e.g. &.,'"!@") */}
+                      <small dangerouslySetInnerHTML= {{__html: ytresult.snippet.title}}>
+                        
+                      </small></p>
                   </div>
                   <div className="videos" key={i}>
                     <iframe class="video" src={url}
